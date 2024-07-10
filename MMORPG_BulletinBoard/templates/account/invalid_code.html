@@ -1,0 +1,11 @@
+{% extends default.html %}
+{% block content %}
+<title>Неверный код активации</title>
+<div class="text-center mt-4 name">
+    <h3>Неверный код активации</h3>
+</div>
+<h4>Вы ввели неверный код активации</h4>
+<form>
+    <input type="button" onclick="history.back();" class="btn btn-outline-secondary btn-sm" value="Вернуться к вводу кода">
+</form>
+{% endblock %}

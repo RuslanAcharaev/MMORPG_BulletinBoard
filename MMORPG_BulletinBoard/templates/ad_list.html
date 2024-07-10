@@ -1,0 +1,68 @@
+<!--  наследуемся от шаблона default.html, который мы создавали для flatpages -->
+{% extends 'flatpages/default.html' %}
+
+<!--Импортируем модуль с нашим тегом-->
+{% load custom_tags %}
+
+<!-- Название у нас будет Объявления -->
+{% block title %}
+Объявления
+{% endblock title %}
+
+<!-- В контенте на странице мы выводим все объявления -->
+{% block content %}
+
+<h1>Все объявления</h1>
+<h3><span class="text-muted fs-6 fw-normal">Всего объявлений: {{ page_obj.paginator.count }}</span></h3>
+<hr>
+<!-- Выводим объявления, только если они есть с помощью тега if -->
+    {% if ads %}
+        <ul class="list-group list-group-flush bg-transparent">
+
+            {% for ad in ads %}
+                <li class="list-group-item bg-transparent">
+                    <small class="fw-bold">{{ ad.dateCreation | date:'d M Y' }} </small>
+                    <a href="{% url 'ad_detail' ad.id %}">{{ ad.title }}</a>
+                    <small class="text-muted">Автор: {{ ad.author }}</small> <br>
+                    <small class="fw-bold"> Категория: {{ ad.get_adCategory_display }}</small>
+                    {{ ad.text|truncatechars:35|safe }}
+                    {% if ad.author == request.user %}
+                        {% if perms.BulletinBoard.change_ad %}
+                        <a href="{% url 'ad_update' pk=ad.id %}">Изменить</a>
+                        {% endif %}
+                        {% if perms.BulletinBoard.delete_ad %}
+                        <a href="{% url 'ad_delete' pk=ad.id %}">Удалить</a>
+                        {% endif %}
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+       <!-- Если объявлений нет, говорим, что объявлений нет -->
+       <h2>Объявлений нет!</h2>
+    {% endif %}
+<hr>
+<!--    Добавляем пагинацию на страницу -->
+<!--    Для каждой ссылки пагинации указываем обработку через тег-->
+
+<!--    Информация о предыдущих страницах-->
+    {% if page_obj.has_previous %}
+        <a href="?{% url_replace page=1 %}">1</a>
+        {% if page_obj.previous_page_number != 1 %}
+            ...
+            <a href="?{% url_replace page=page_obj.previous_page_number %}">{{ page_obj.previous_page_number }}</a>
+        {% endif %}
+    {% endif %}
+
+<!--    Информация о текущей странице-->
+    {{ page_obj.number }}
+
+<!--    Информация о следующих страницах-->
+    {% if page_obj.has_next %}
+        <a href="?{% url_replace page=page_obj.next_page_number %}">{{ page_obj.next_page_number }}</a>
+        {% if paginator.num_pages != page_obj.next_page_number %}
+            ...
+            <a href="?{% url_replace page=page_obj.paginator.num_pages %}">{{ page_obj.paginator.num_pages }}</a>
+        {% endif %}
+    {% endif %}
+{% endblock content %}
