@@ -1,10 +1,7 @@
 from django.conf import settings
-from django.contrib.auth.models import User
 from django.db import models
 from ckeditor_uploader.fields import RichTextUploadingField
 from django.urls import reverse
-
-# Create your models here.
 
 
 CATEGORY_CHOICES = (

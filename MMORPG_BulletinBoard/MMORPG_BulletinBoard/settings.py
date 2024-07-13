@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'accounts',
 
     'django_filters',
+    'django_apscheduler',
 
     'ckeditor',
     'ckeditor_uploader',
@@ -133,7 +134,7 @@ TIME_ZONE = 'UTC'
 
 USE_I18N = True
 
-USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)
@@ -177,3 +178,7 @@ EMAIL_HOST_PASSWORD = "gdyjazrlvzhpwfge"
 EMAIL_USE_TLS = False
 EMAIL_USE_SSL = True
 DEFAULT_FROM_EMAIL = "NewsPortal.notifications@yandex.ru"
+
+APSCHEDULER_DATETIME_FORMAT = 'N j, y, f:s a'
+
+APSCHEDULER_RUN_NOW_TIMEOUT = 25

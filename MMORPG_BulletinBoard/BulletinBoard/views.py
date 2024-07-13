@@ -7,6 +7,7 @@ from django.core.mail import EmailMultiAlternatives
 from django.shortcuts import render, get_object_or_404, redirect
 from django.template.loader import render_to_string
 from django.urls import reverse_lazy
+from django.views import View
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
 from .filters import AdFilter, ResponseFilter
@@ -191,3 +192,29 @@ def response_accept(request, response_id):
 
 def forbidden(request):
     return render(request, 'forbidden.html')
+
+
+@login_required()
+def subscription(request):
+    not_subscriber = User.objects.filter(subscriber=False).filter(id=request.user.id).exists()
+    return render(request, 'subscription.html', {'not_subscriber': not_subscriber})
+
+
+@login_required()
+def subscribe(request):
+    user = request.user
+    user.subscriber = True
+    user.save()
+
+    message = 'Вы успешно подписались на рассылку объявлений.'
+    return render(request, 'subscribe.html', {'message': message})
+
+
+@login_required()
+def unsubscribe(request):
+    user = request.user
+    user.subscriber = False
+    user.save()
+
+    message = 'Вы успешно отписались от рассылки объявлений.'
+    return render(request, 'subscribe.html', {'message': message})
