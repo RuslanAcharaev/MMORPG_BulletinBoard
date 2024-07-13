@@ -1,0 +1,48 @@
+<!--  наследуемся от шаблона default.html, который мы создавали для flatpages -->
+{% extends 'flatpages/default.html' %}
+
+<!--Импортируем модуль с нашим тегом-->
+{% load custom_tags %}
+
+<!-- Название -->
+{% block title %}
+Отклики на мои объявления
+{% endblock title %}
+
+<!-- В контенте на странице мы выводим все отклики -->
+{% block content %}
+
+<h1>Все отклики</h1>
+<hr>
+<form action="" method="get">
+   {{ filter.form.as_p }}
+   <input type="submit" value="Найти" />
+</form>
+<ul class="list-group list-group-flush">
+    {% if responses %}
+           {% for response in responses %}
+           <li class="list-group-item">
+               <p>Отклик на объявление: <a href="{% url 'ad_detail' response.responseAd.id %}">{{ response.responseAd.title }}</a>
+               <small class="fw-bold"> Категория: {{ response.responseAd.get_adCategory_display }}</small></p>
+
+               <small class="fw-bold">{{ response.dateCreation|date:'M d Y D H:i' }}</small>
+               <small class="fw-bold">Автор: {{ response.responseUser }} </small>
+               <small class="fw-bold">Текст отклика: {{ response.text }} </small>
+
+               {% if response.status == 'ACCEPTED' %}
+                    <p style="color: green"><b>Отклик принят</b></p>
+               {% else %}
+                    <p style="color: gray"><b>Отклик на рассмотрении</b></p>
+               {% endif %}
+
+               {% if response.status == 'PENDING' %}
+               <a href="{% url 'response_accept' response.id %}" class="btn btn-secondary btn-sm">Принять отклик</a>
+               <a href="{% url 'response_delete' response.id %}" class="btn btn-secondary btn-sm">Удалить отклик</a>
+               {% endif %}
+           </li>
+           {% endfor %}
+    {% else %}
+       <h2>Откликов нет!</h2>
+    {% endif %}
+</ul>
+{% endblock content %}

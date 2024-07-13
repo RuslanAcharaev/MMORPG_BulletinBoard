@@ -1,0 +1,8 @@
+{% extends 'flatpages/default.html' %}
+
+{% block content %}
+<h3>Доступ ограничен.</h3>
+<p>Для того чтобы просмотреть объявление и оставить отклик, пожалуйста, пройдите аутентификацию.</p>
+<hr>
+<a href="{% url 'ad_list'  %}" class="btn btn-secondary btn-sm">Вернуться к списку объявлений</a> <a href="{% url 'account_login' %}" class="btn btn-secondary btn-sm">Аутентификация</a>
+{% endblock content %}

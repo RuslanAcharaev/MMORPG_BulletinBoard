@@ -44,6 +44,8 @@ INSTALLED_APPS = [
     'BulletinBoard',
     'accounts',
 
+    'django_filters',
+
     'ckeditor',
     'ckeditor_uploader',
 

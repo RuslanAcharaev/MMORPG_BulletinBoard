@@ -30,6 +30,11 @@
                     </ul>
                     <ul class="navbar-nav ms-auto">
 
+                        <li class="nav-item">
+                            {% if user.is_authenticated %}
+                            <a class="nav-link" href="/ads/responses">Управление откликами</a>
+                            {% endif %}
+                        </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 {% if user.is_authenticated %}

@@ -23,7 +23,6 @@ CATEGORY_CHOICES = (
 STATUS_CHOICES = (
     ('PENDING', 'Ожидает рассмотрения'),
     ('ACCEPTED', 'Принят'),
-    ('REJECTED', 'Отклонен'),
 )
 
 

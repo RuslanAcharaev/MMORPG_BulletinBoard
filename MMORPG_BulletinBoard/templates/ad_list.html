@@ -14,6 +14,12 @@
 
 <h1>Все объявления</h1>
 <h3><span class="text-muted fs-6 fw-normal">Всего объявлений: {{ page_obj.paginator.count }}</span></h3>
+
+<form action="" method="get">
+   {{ filterset.form.as_p }}
+   <input type="submit" value="Найти" />
+</form>
+
 <hr>
 <!-- Выводим объявления, только если они есть с помощью тега if -->
     {% if ads %}
@@ -22,16 +28,16 @@
             {% for ad in ads %}
                 <li class="list-group-item bg-transparent">
                     <small class="fw-bold">{{ ad.dateCreation | date:'d M Y' }} </small>
-                    <a href="{% url 'ad_detail' ad.id %}">{{ ad.title }}</a>
+                    <h5><a href="{% url 'ad_detail' ad.id %}">{{ ad.title }}</a></h5>
                     <small class="text-muted">Автор: {{ ad.author }}</small> <br>
                     <small class="fw-bold"> Категория: {{ ad.get_adCategory_display }}</small>
-                    {{ ad.text|truncatechars:35|safe }}
+                    {{ ad.text|truncatechars:40|safe }}
                     {% if ad.author == request.user %}
                         {% if perms.BulletinBoard.change_ad %}
-                        <a href="{% url 'ad_update' pk=ad.id %}">Изменить</a>
+                        <a href="{% url 'ad_update' pk=ad.id %}" class="btn btn-secondary btn-sm">Изменить</a>
                         {% endif %}
                         {% if perms.BulletinBoard.delete_ad %}
-                        <a href="{% url 'ad_delete' pk=ad.id %}">Удалить</a>
+                        <a href="{% url 'ad_delete' pk=ad.id %}" class="btn btn-secondary btn-sm">Удалить</a>
                         {% endif %}
                     {% endif %}
                 </li>

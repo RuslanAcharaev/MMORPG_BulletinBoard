@@ -17,20 +17,41 @@
 
 <p>
     {% if perms.BulletinBoard.change_ad and ad_detail.author == request.user %}
-    <a href="{% url 'ad_update' pk=ad_detail.id %}">Редактировать</a>
+    <a href="{% url 'ad_update' pk=ad_detail.id %}" class="btn btn-secondary btn-sm">Редактировать</a>
     {% endif %}
     {% if perms.BulletinBoard.delete_ad and ad_detail.author == request.user %}
-    <a href="{% url 'ad_delete' pk=ad_detail.id %}">Удалить</a>
+    <a href="{% url 'ad_delete' pk=ad_detail.id %}" class="btn btn-secondary btn-sm">Удалить</a>
     {% endif %}
 </p>
 
 <hr>
-<h3>Откликнуться на объявление:</h3>
-<form action="{% url 'response_create' pk=ad_detail.id %}" method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="Откликнуться" />
-</form>
-
+<div>
+    {% if ad_detail.response_set.all %}
+        <h5>Отклики:</h5>
+        {% for response in ad_detail.response_set.all %}
+            <p>
+                {{ response.responseUser }}: {{ response.text }}
+                {% if response.responseUser == request.user %}
+                    <a href="{% url 'response_delete' response.id %}" class="btn btn-secondary btn-sm">Удалить отклик</a>
+                {% endif %}
+            </p>
+        {% endfor %}
+    {% else %}
+        <h3>Откликов нет.</h3>
+    {% endif %}
+</div>
+<hr>
+{% if user.is_authenticated %}
+    {% if not is_author %}
+        {% if ad_detail.author != request.user %}
+            <h3>Откликнуться на объявление:</h3>
+            <form action="{% url 'response_create' pk=ad_detail.id %}" method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <input type="submit" value="Откликнуться" />
+            </form>
+        {% endif %}
+    {% endif %}
+{% endif %}
 
 {% endblock content %}
